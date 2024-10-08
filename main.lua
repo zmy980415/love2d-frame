@@ -21,16 +21,20 @@ function love.draw()
     sceneManager:draw()
 end
 
+local function handleMouseEvent(event, ...)
+    sceneManager[event](sceneManager, ...)
+end
+
 function love.mousepressed(x, y, button, istouch, presses)
-    sceneManager:mousepressed(x, y, button, istouch, presses)
+    handleMouseEvent("mousepressed", x, y, button, istouch, presses)
 end
 
 function love.mousereleased(x, y, button, istouch, presses)
-    sceneManager:mousereleased(x, y, button, istouch, presses)
+    handleMouseEvent("mousereleased", x, y, button, istouch, presses)
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
-    sceneManager:mousemoved(x, y, dx, dy, istouch)
+    handleMouseEvent("mousemoved", x, y, dx, dy, istouch)
 end
 
 function love.textinput(t)

@@ -16,24 +16,28 @@ function MainMenu:draw()
     love.graphics.print("Main Menu", 100, 100)
 end
 
+local function handleEvent(event, ...)
+    -- 处理事件的通用函数
+end
+
 function MainMenu:mousepressed(x, y, button, istouch, presses)
-    -- 处理鼠标按下事件
+    handleEvent("mousepressed", x, y, button, istouch, presses)
 end
 
 function MainMenu:mousereleased(x, y, button, istouch, presses)
-    -- 处理鼠标释放事件
+    handleEvent("mousereleased", x, y, button, istouch, presses)
 end
 
 function MainMenu:mousemoved(x, y, dx, dy, istouch)
-    -- 处理鼠标移动事件
+    handleEvent("mousemoved", x, y, dx, dy, istouch)
 end
 
 function MainMenu:textinput(t)
-    -- 处理文本输入事件
+    handleEvent("textinput", t)
 end
 
 function MainMenu:keypressed(key)
-    -- 处理按键事件
+    handleEvent("keypressed", key)
 end
 
 return MainMenu

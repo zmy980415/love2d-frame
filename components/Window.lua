@@ -56,52 +56,37 @@ function Window:update(dt)
     end
 end
 
-function Window:mousepressed(x, y, button, istouch, presses)
-    if button == 1 and self:isHovered(x, y) then
+function Window:handleMouseEvent(event, x, y, ...)
+    if event == "pressed" and self:isHovered(x, y) then
         if y < self.y + 30 then  -- 点击在标题栏上
             self.isDragging = true
             self.dragOffsetX = x - self.x
             self.dragOffsetY = y - self.y
         else
-            -- 传递事件给组件
-            for _, component in ipairs(self.components) do
-                for __, uiComponent in ipairs(component.components) do
-                    local localX, localY = x - self.x - component.x, y - self.y - component.y
-                    if uiComponent.mousepressed then
-                        uiComponent:mousepressed(localX, localY, button, istouch, presses)
-                    end
-                end
-            end
+            self:dispatchEventToComponents("mouse" .. event, x, y, ...)
         end
-    end
-end
-
-function Window:mousereleased(x, y, button, istouch, presses)
-    if button == 1 then
+    elseif event == "released" then
         self.isDragging = false
-        -- 传递事件给组件
-        for _, component in ipairs(self.components) do
-            for __, uiComponent in ipairs(component.components) do
-                local localX, localY = x - self.x - component.x, y - self.y - component.y
-                if uiComponent.mousereleased then
-                    uiComponent:mousereleased(localX, localY, button, istouch, presses)
-                end
-            end
-        end
-    end
-end
-
-function Window:mousemoved(x, y, dx, dy, istouch)
-    if self.isDragging then
+        self:dispatchEventToComponents("mouse" .. event, x, y, ...)
+    elseif event == "moved" and self.isDragging then
         self.x = x - self.dragOffsetX
         self.y = y - self.dragOffsetY
     else
-        -- 传递事件给组件
-        for _, component in ipairs(self.components) do
-            for __, uiComponent in ipairs(component.components) do
-                local localX, localY = x - self.x - component.x, y - self.y - component.y
-                if uiComponent.mousemoved then
-                    uiComponent:mousemoved(localX, localY, dx, dy, istouch)
+        self:dispatchEventToComponents("mouse" .. event, x, y, ...)
+    end
+end
+
+function Window:dispatchEventToComponents(event, ...)
+    local args = {...}
+    for _, component in ipairs(self.components) do
+        for __, uiComponent in ipairs(component.components) do
+            if uiComponent[event] then
+                if event:find("mouse") then
+                    local x, y = args[1], args[2]
+                    local localX, localY = x - self.x - component.x, y - self.y - component.y
+                    uiComponent[event](uiComponent, localX, localY, select(3, ...))
+                else
+                    uiComponent[event](uiComponent, ...)
                 end
             end
         end
@@ -109,23 +94,24 @@ function Window:mousemoved(x, y, dx, dy, istouch)
 end
 
 function Window:textinput(t)
-    for _, component in ipairs(self.components) do
-        for _, uiComponent in ipairs(component.components) do
-            if uiComponent.textinput then
-                uiComponent:textinput(t)
-            end
-        end
-    end
+    self:dispatchEventToComponents("textinput", t)
 end
 
 function Window:keypressed(key)
-    for _, component in ipairs(self.components) do
-        for _, uiComponent in ipairs(component.components) do
-            if uiComponent.keypressed then
-                uiComponent:keypressed(key)
-            end
-        end
-    end
+    self:dispatchEventToComponents("keypressed", key)
+end
+
+-- 添加默认的 Love2D 事件处理函数
+function Window:mousepressed(x, y, button, istouch, presses)
+    self:handleMouseEvent("pressed", x, y, button, istouch, presses)
+end
+
+function Window:mousereleased(x, y, button, istouch, presses)
+    self:handleMouseEvent("released", x, y, button, istouch, presses)
+end
+
+function Window:mousemoved(x, y, dx, dy, istouch)
+    self:handleMouseEvent("moved", x, y, dx, dy, istouch)
 end
 
 return Window
