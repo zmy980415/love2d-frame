@@ -195,20 +195,28 @@ function EditBox:mousepressed(x, y, button, istouch, presses)
 end
 
 function EditBox:mousemoved(x, y, dx, dy, istouch)
-    if love.mouse.isDown(1) and self.isFocused then
-        local mx = x - self.x - 5
-        local textWidth = 0
-        for i = 1, #self.text do
-            textWidth = love.graphics.getFont():getWidth(self.text:sub(1, i))
-            if textWidth > mx then
-                self.cursorPosition = i - 1
-                break
+    if love.mouse.isDown(1)  then
+        if self:isHovered(x, y) then
+            self.isFocused = true
+        else
+            self.isFocused = false
+        end
+        if self.isFocused then
+            local mx = x - self.x - 5
+            local textWidth = 0
+            for i = 1, #self.text do
+                textWidth = love.graphics.getFont():getWidth(self.text:sub(1, i))
+                if textWidth > mx then
+                    self.cursorPosition = i - 1
+                    break
+                end
             end
+            if mx > textWidth then
+                self.cursorPosition = #self.text
+            end
+            self.selectionEnd = self.cursorPosition
         end
-        if mx > textWidth then
-            self.cursorPosition = #self.text
-        end
-        self.selectionEnd = self.cursorPosition
+        
     end
 end
 

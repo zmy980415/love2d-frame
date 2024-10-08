@@ -27,14 +27,14 @@ function Button:draw()
     love.graphics.print(self.x, self.y, (self.width .. self.height))
 end
 
-function Button:update(dt,mx,my)
+function Button:update(dt, mx, my)
     self.hovered = self:isHovered(mx, my)
 end
 
 function Button:mousepressed(x, y, button, istouch, presses)
     if button == 1 and self.hovered then
         self.pressed = true
-        print("Button " .. self.label .. " pressed!")
+        self:onPress()
     end
 end
 
@@ -42,9 +42,23 @@ function Button:mousereleased(x, y, button, istouch, presses)
     if button == 1 and self.pressed then
         self.pressed = false
         if self:isHovered(x, y) then
-            print("Button " .. self.label .. " clicked!")
+            self:onClick()
         end
+        self:onRelease()
     end
+end
+
+-- 可重写的方法
+function Button:onPress()
+    print("Button " .. self.label .. " pressed!")
+end
+
+function Button:onClick()
+    print("Button " .. self.label .. " clicked!")
+end
+
+function Button:onRelease()
+    -- 可以在子类中重写
 end
 
 return Button
