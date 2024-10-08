@@ -39,27 +39,22 @@ function Window:draw()
         love.graphics.push()
         love.graphics.translate(self.x, self.y + 30)  -- 确保组件在标题栏下方绘制
         component:draw()
-        -- 显示组件坐标
-        -- love.graphics.setColor(1, 1, 1)
-        -- love.graphics.print(string.format("(%d, %d)", component.x, component.y), component.x, component.y)
         love.graphics.pop()
     end
 end
 
 -- 更新逻辑
 function Window:update(dt)
-    local x,y = love.mouse.getPosition()
+    local x, y = love.mouse.getPosition()
     for _, component in ipairs(self.components) do
         for __, uiComponent in ipairs(component.components) do
-            
             local localX, localY = x - self.x - component.x, y - self.y - component.y
             if uiComponent.update then
-                uiComponent:update(dt,localX, localY)
+                uiComponent:update(dt, localX, localY)
             end
         end
     end
 end
-
 
 function Window:mousepressed(x, y, button, istouch, presses)
     if button == 1 and self:isHovered(x, y) then
@@ -108,6 +103,26 @@ function Window:mousemoved(x, y, dx, dy, istouch)
                 if uiComponent.mousemoved then
                     uiComponent:mousemoved(localX, localY, dx, dy, istouch)
                 end
+            end
+        end
+    end
+end
+
+function Window:textinput(t)
+    for _, component in ipairs(self.components) do
+        for _, uiComponent in ipairs(component.components) do
+            if uiComponent.textinput then
+                uiComponent:textinput(t)
+            end
+        end
+    end
+end
+
+function Window:keypressed(key)
+    for _, component in ipairs(self.components) do
+        for _, uiComponent in ipairs(component.components) do
+            if uiComponent.keypressed then
+                uiComponent:keypressed(key)
             end
         end
     end
