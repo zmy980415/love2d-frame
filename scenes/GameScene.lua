@@ -62,10 +62,6 @@ function GameScene:draw()
         window:draw()
     end
 
-    -- 显示鼠标坐标
-    local mx, my = love.mouse.getPosition()
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print(string.format("Mouse: (%d, %d)", mx, my), mx, my)
 end
 
 function GameScene:mousepressed(x, y, button, istouch, presses)

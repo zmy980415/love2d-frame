@@ -29,11 +29,7 @@ end
 function HorizontalLayout:draw()
     for _, component in ipairs(self.components) do
         love.graphics.push()
-        -- love.graphics.translate(component.x, component.y)
         component:draw()
-        -- 显示组件坐标
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.print(string.format("(%d, %d)", component.x, component.y), component.x, component.y)
         love.graphics.pop()
     end
 end
