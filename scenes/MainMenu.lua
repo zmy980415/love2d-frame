@@ -1,43 +1,41 @@
 -- MainMenu.lua
 
 local MainMenu = {}
+local Button = require("components.Button")
 
 function MainMenu:load()
     -- 初始化主菜单场景
-    print("Main Menu Loaded")
+    self.titleFont = love.graphics.newFont("assets/fonts/simhei.ttf", 48)
+    self.buttonFont = love.graphics.newFont("assets/fonts/simhei.ttf", 24)
+    self.startButton = Button:new(300, 400, 200, 50, "Start Game")
+    self.startButton.onClick = function()
+        print("Start Game button clicked!")
+        sceneManager:switchTo("snakeGame")  -- 切换到贪吃蛇游戏场景
+    end
 end
 
 function MainMenu:update(dt)
     -- 更新主菜单场景
+    local mx, my = love.mouse.getPosition()
+    self.startButton:update(dt, mx, my)
 end
 
 function MainMenu:draw()
     -- 绘制主菜单场景
-    love.graphics.print("Main Menu", 100, 100)
-end
+    love.graphics.setFont(self.titleFont)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf("Welcome to My Game", 0, 100, love.graphics.getWidth(), "center")
 
-local function handleEvent(event, ...)
-    -- 处理事件的通用函数
+    love.graphics.setFont(self.buttonFont)
+    self.startButton:draw()
 end
 
 function MainMenu:mousepressed(x, y, button, istouch, presses)
-    handleEvent("mousepressed", x, y, button, istouch, presses)
+    self.startButton:mousepressed(x, y, button, istouch, presses)
 end
 
 function MainMenu:mousereleased(x, y, button, istouch, presses)
-    handleEvent("mousereleased", x, y, button, istouch, presses)
-end
-
-function MainMenu:mousemoved(x, y, dx, dy, istouch)
-    handleEvent("mousemoved", x, y, dx, dy, istouch)
-end
-
-function MainMenu:textinput(t)
-    handleEvent("textinput", t)
-end
-
-function MainMenu:keypressed(key)
-    handleEvent("keypressed", key)
+    self.startButton:mousereleased(x, y, button, istouch, presses)
 end
 
 return MainMenu

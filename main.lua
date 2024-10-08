@@ -3,14 +3,15 @@
 local SceneManager = require("managers.SceneManager")
 local MainMenu = require("scenes.MainMenu")
 local GameScene = require("scenes.GameScene")
+local SnakeGameScene = require("scenes.SnakeGameScene")  -- 新增
 
-local sceneManager
 
 function love.load()
     sceneManager = SceneManager:new()
     sceneManager:addScene("mainMenu", MainMenu)
     sceneManager:addScene("game", GameScene)
-    sceneManager:switchTo("game")  -- 启动时切换到游戏场景
+    sceneManager:addScene("snakeGame", SnakeGameScene)  -- 新增
+    sceneManager:switchTo("mainMenu")  -- 启动时切换到主菜单场景
 end
 
 function love.update(dt)
