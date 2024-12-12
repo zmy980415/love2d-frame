@@ -125,12 +125,20 @@ function EditBox:keypressed(key)
             self.cursorPosition = #self.text
         elseif key == "c" and love.keyboard.isDown("lctrl") then
             if self.selectionStart ~= self.selectionEnd then
-                love.system.setClipboardText(self.text:sub(self.selectionStart + 1, self.selectionEnd))
+                local selStart = math.min(self.selectionStart, self.selectionEnd)
+                local selEnd = math.max(self.selectionStart, self.selectionEnd)
+                love.system.setClipboardText(self.text:sub(selStart + 1, selEnd))
             end
         elseif key == "v" and love.keyboard.isDown("lctrl") then
             local clipboardText = love.system.getClipboardText()
             if clipboardText then
-                self:textinput(clipboardText)
+                local selStart = math.min(self.selectionStart, self.selectionEnd)
+                local selEnd = math.max(self.selectionStart, self.selectionEnd)
+                -- self:textinput(clipboardText)
+                local txt = self.text:sub(1, self.cursorPosition) .. clipboardText
+                self.text = txt .. self.text:sub(self.cursorPosition + 1)
+                self.cursorPosition = #txt
+                
             end
         end
     end
@@ -157,8 +165,10 @@ function EditBox:deleteCharacterForward()
 end
 
 function EditBox:deleteSelection()
-    self.text = self.text:sub(1, self.selectionStart) .. self.text:sub(self.selectionEnd + 1)
-    self.cursorPosition = self.selectionStart
+    local selStart = math.min(self.selectionStart, self.selectionEnd)
+    local selEnd = math.max(self.selectionStart, self.selectionEnd)
+    self.text = self.text:sub(1, selStart) .. self.text:sub(selEnd + 1)
+    self.cursorPosition = selStart
     self.selectionStart = self.cursorPosition
     self.selectionEnd = self.cursorPosition
 end

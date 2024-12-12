@@ -10,7 +10,7 @@ function MainMenu:load()
     self.startButton = Button:new(300, 400, 200, 50, "Start Game")
     self.startButton.onClick = function()
         print("Start Game button clicked!")
-        sceneManager:switchTo("snakeGame")  -- 切换到贪吃蛇游戏场景
+        sceneManager:switchTo("game")  -- 切换到贪吃蛇游戏场景
     end
 end
 
