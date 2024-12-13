@@ -16,6 +16,12 @@
 - **HorizontalLayout**: 水平布局，组件水平排列。
 - **GridLayout**: 网格布局，组件按网格排列。
 
+
+## 界面展示
+![](./doc/imgs//截图1.png)
+
+
+
 ## 贡献
 
 欢迎贡献代码！请提交 Pull Request 或报告问题。
