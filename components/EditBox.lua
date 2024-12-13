@@ -177,10 +177,13 @@ function EditBox:mousepressed(x, y, button, istouch, presses)
     if button == 1 then
         local currentTime = love.timer.getTime()
         if currentTime - self.lastClickTime < 0.3 then
-            self.selectionStart = 0
-            self.selectionEnd = #self.text
-            self.cursorPosition = #self.text
-            self.scrollOffset = 0
+            if x >= self.x and x <= self.x + self.width and y >= self.y and y <= self.y + self.height then
+
+                self.selectionStart = 0
+                self.selectionEnd = #self.text
+                self.cursorPosition = #self.text
+                self.scrollOffset = 0
+            end
         else
             self.isFocused = self:isHovered(x, y)
             if self.isFocused then

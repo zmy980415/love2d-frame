@@ -16,10 +16,10 @@ function Checkbox:draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("line", self.x, self.y, self.width, self.height, 5, 5)
     if self.isChecked then
-        love.graphics.setColor(0, 0, 0)
+        love.graphics.setColor(196/255, 246/255, 89/255)
         love.graphics.rectangle("fill", self.x + 2, self.y + 2, self.width - 4, self.height - 4, 5, 5)
     end
-    love.graphics.setColor(0, 0, 0)
+    love.graphics.setColor(1,1,1)
     love.graphics.printf(self.label, self.x + self.width + 5, self.y + self.height / 2 - 6, 100, "left")
 end
 

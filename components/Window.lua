@@ -12,6 +12,7 @@ function Window:new(x, y, width, height, title)
     win.dragOffsetX = 0
     win.dragOffsetY = 0
     win.components = {}
+    self.canvas = love.graphics.newCanvas(win.width, win.height)
     return win
 end
 
@@ -20,27 +21,34 @@ function Window:addComponent(component)
 end
 
 function Window:draw()
+    local r,g,b,a = love.graphics.getColor()
+    love.graphics.setCanvas(self.canvas)
+    -- love.graphics.clear()
     -- 绘制窗口背景
     love.graphics.setColor(0.2, 0.2, 0.2)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, 5, 5)
+    love.graphics.rectangle("fill", 0, 0, self.width, self.height, 5, 5)
 
     -- 绘制窗口标题栏
     love.graphics.setColor(0.3, 0.3, 0.3)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, 30, 5, 5)
+    love.graphics.rectangle("fill", 0, 0, self.width, 30, 5, 5)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(self.title, self.x, self.y + 8, self.width, "center")
+    love.graphics.printf(self.title, 0, 0 + 8, self.width, "center")
 
     -- 绘制窗口边框
     love.graphics.setColor(0.5, 0.5, 0.5)
-    love.graphics.rectangle("line", self.x, self.y, self.width, self.height, 5, 5)
+    love.graphics.rectangle("line", 0, 0, self.width, self.height, 5, 5)
 
     -- 绘制窗口内的组件
     for _, component in ipairs(self.components) do
         love.graphics.push()
-        love.graphics.translate(self.x, self.y + 30)  -- 确保组件在标题栏下方绘制
+        love.graphics.translate(0, 0 + 30)  -- 确保组件在标题栏下方绘制
         component:draw()
         love.graphics.pop()
     end
+    love.graphics.setCanvas()
+    love.graphics.setColor(r, g, b, a)
+    love.graphics.draw(self.canvas, self.x, self.y)
+    love.graphics.setColor(r, g, b, a)
 end
 
 -- 更新逻辑
